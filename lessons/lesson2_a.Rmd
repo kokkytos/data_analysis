@@ -78,7 +78,7 @@ Z.critical
 Βήμα 3.
 Υπολογίζουμε την τιμή του στατιστικού τεστ.
 ```{r}
-z_obtained<-(mean_sample-mean_pop)/sd_pop*sqrt(N)
+z_obtained<-(mean_sample-mean_pop)/(sd_pop/sqrt(N))
 z_obtained
 ```
 Συμπέρασμα:
