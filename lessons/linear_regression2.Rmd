@@ -66,6 +66,11 @@ plot(model, pch=16, which=1)
 ```{r}
 sum((df$y - predict(model))^2)/n
 
+# ή
+# sum(model$residuals^2)/n
+
+
+
 ```
 
 Ή εναλλακτικά με την συνάρτηση mse() από την βιβλιοθήκη Metrics (απαιτείται εγκατάσταση).
