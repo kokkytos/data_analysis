@@ -294,10 +294,10 @@ F-statistic: 107.7 on 1 and 24 DF,  p-value: 2.362e-10</code></pre>
 <p>Στην συνέχεια θα προσαρμόσουμε μια γραμμή στο διάγραμμα διασποράς με βάση αυτό το μοντέλο. Για αυτό τον λόγο απαιτείται να γίνει πρόβλεψη τιμών για σημεία της γραμμής. Ορίζουμε για την ανεξάρτητη μεταβλητή (time) τιμές από 0 ως 30’ με βήμα 0.1’ και στην συνέχεια χρησιμοποιουμε το εκθετικό μοντέλο .</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGltZXZhbHVlcyA8LSBzZXEoMCwgMzAsIDAuMSlcbkNvdW50cy5leHBvbmVudGlhbDIgPC0gZXhwKHByZWRpY3QoZXhwb25lbnRpYWwubW9kZWwsZGF0YS5mcmFtZShUaW1lPXRpbWV2YWx1ZXMpKSlcbmhlYWQoQ291bnRzLmV4cG9uZW50aWFsMiwgMjApXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGltZXZhbHVlcyA8LSBzZXEoMCwgMzAsIDAuMSlcbkNvdW50cy5leHBvbmVudGlhbDIgPC0gZXhwKHByZWRpY3QoZXhwb25lbnRpYWwubW9kZWwsZGF0YS5mcmFtZShUaW1lPXRpbWV2YWx1ZXMpKSlcbmhlYWQoQ291bnRzLmV4cG9uZW50aWFsMiwgMjApICMgzrXOus+Ez43PgM+Jz4POtyDPhM+Jzr0gz4DPgc+Oz4TPic69IDIwIM+DzrfOvM61zq/Pic69XG5gYGAifQ== -->
 <pre class="r"><code>timevalues &lt;- seq(0, 30, 0.1)
 Counts.exponential2 &lt;- exp(predict(exponential.model,data.frame(Time=timevalues)))
-head(Counts.exponential2, 20)</code></pre>
+head(Counts.exponential2, 20) # εκτύπωση των πρώτων 20 σημείων</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiICAgICAgIDEgICAgICAgIDIgICAgICAgIDMgICAgICAgIDQgICAgICAgIDUgICAgICAgIDYgICAgICAgIDcgICAgICAgIDggICAgICAgIDkgICAgICAgMTAgICAgICAgMTEgICAgICAgMTIgICAgICAgMTMgICAgICAgMTQgXG45NS4xMzA0NyA5NC41MjQzOCA5My45MjIxNSA5My4zMjM3NiA5Mi43MjkxOCA5Mi4xMzgzOSA5MS41NTEzNiA5MC45NjgwNyA5MC4zODg1MCA4OS44MTI2MiA4OS4yNDA0MSA4OC42NzE4NSA4OC4xMDY5MSA4Ny41NDU1NiBcbiAgICAgIDE1ICAgICAgIDE2ICAgICAgIDE3ICAgICAgIDE4ICAgICAgIDE5ICAgICAgIDIwIFxuODYuOTg3ODAgODYuNDMzNTggODUuODgyOTAgODUuMzM1NzMgODQuNzkyMDQgODQuMjUxODIgXG4ifQ== -->
 <pre><code>       1        2        3        4        5        6        7        8        9       10       11       12       13       14 
