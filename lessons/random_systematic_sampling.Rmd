@@ -15,7 +15,6 @@ output:
 library(sf)
 library(leaflet)
 library(tidyverse)
-library(dplyr)
 ```
 
 
