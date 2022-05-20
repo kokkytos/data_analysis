@@ -1,0 +1,113 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+Στόχος του τρέχοντος notebook είναι να επιδειχθεί η απλή τυχαία δειγματοληψία και η συστηματική δειγματοληψία με την R.
+
+Από τον σύνολο των οικισμών την Ελλάδα που υπάρχουν σε ένα shapefile θα επιλεγούν 350 οικισμοί
+
+Εισαγωγή των απαραίτητων βιβλιοθηκών
+
+```{r message=FALSE}
+library(sf)
+library(leaflet)
+library(tidyverse)
+library(dplyr)
+```
+
+
+Ανάγνωση του αρχείου οικισμών (geojson).
+
+```{r}
+
+oikismoi <-st_read("./data/oikismoi.geojson") %>% 
+  mutate(id=row_number()) %>% # προσθήκη στήλης με αύξοντα αριθμό
+ cbind( st_coordinates(.)) # προσθήκη στηλών συντεταγμένων
+```
+
+
+Χαρτογραφική απόδοση των δεδομένων του πληθυσμού.
+
+```{r}
+leaflet(data = oikismoi ) %>%
+  addTiles() %>%
+  addMarkers(
+    ~ X,
+    ~ Y,
+    
+    popup = ~ as.character(id),
+    label = ~ as.character(OIKISMOS),
+    clusterOptions = markerClusterOptions()
+  )
+```
+Διεξάγουμε απλή τυχαία δειγματοληψία:
+
+Προσαρτούμε σε δύο μεταβλητές το μέγεθος του πληθυσμού Ν και το μέγεθος του δείγματος n.
+Το δειγματοληπτικό πλαίσιο ορίζεται από το σύνολο των οικισμών και είναι καταγεγγραμένοι στην στήλη id με αύξουσα αρίθμηση.
+
+
+```{r}
+
+N <- oikismoi %>% nrow()
+n=350
+deigma <- sample(N, n)
+```
+
+
+Παίρνουμε το δείγμα των οικισμών σε ένα νέο αρχείο
+```{r}
+deigma_oikismon <- oikismoi %>% filter(id %in% deigma)
+```
+
+
+
+Χαρτογραφική απόδοση των δεδομένων του δείγματος
+```{r}
+leaflet(data = deigma_oikismon ) %>%
+  addTiles() %>%
+  addMarkers(
+    ~ X,
+    ~ Y,
+    
+    popup = ~ as.character(id),
+    label = ~ as.character(OIKISMOS),
+    clusterOptions = markerClusterOptions()
+  )
+```
+
+
+
+
+Συστηματική δειγματοληψία:
+
+
+Για την συστηματική δειγματοληψία απαιτείται η εύρεση του πηλίκου k=N/n (βήμα). Το πηλίκο αυτό στρογγυλοποιείται προς τον πλησιέστερο ακέραιο (λ). Στην συνέχεια επιλέγουμε έναν τυχαίο αριθμό 1<ρ<λ.
+
+```{r}
+k <- N/n # k = πηλίκο N/n
+l <- round(k, 0) # λ = στρογγυλοποίηση k προς τον πλησιέστερο ακέραιο
+
+r <- sample(1:l, 1) # ρ τυχαίο αριθμό 1<ρ<λ
+systematic_sample <- seq(r, r + l*(n-1), l)
+```
+
+Παίρνουμε το δείγμα των οικισμών σε ένα νέο αρχείο.
+```{r}
+deigma_oikismon_systematic <- oikismoi %>% filter(id %in% systematic_sample)
+```
+
+Οπτικοποίηση του δείγματος των οικισμών από την συστηματική δειγματοληψία
+```{r}
+leaflet(data = deigma_oikismon_systematic ) %>%
+  addTiles() %>%
+  addMarkers(~X,
+                   ~Y,
+
+                   popup = ~as.character(id),
+                   label = ~as.character(OIKISMOS))
+
+```
+
