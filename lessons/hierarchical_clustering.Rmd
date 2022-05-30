@@ -1,0 +1,87 @@
+---
+title: "Ιεραρχική συσσωρευτική συσταδοποίηση"
+author: "Leonidas Liakos"
+date: "5/30/2022"
+output: html_document
+source: "https://uc-r.github.io/hc_clustering"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+Στόχος του παρόντος notebook είναι να επιδειχθεί η διαδικασία της ιεραρχικής συσσωρευτικής συσταδοποίησης (agglomerative hierarchical clustering) με την R.
+
+
+Εισαγωγή των απαραίτητων βιβλιοθηκών.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)  # data manipulation
+library(cluster)    # clustering algorithms
+library(factoextra) # clustering visualization
+library(dendextend) # for comparing two dendrograms
+```
+
+
+Χρησιμοποιούμε τα δεδομένα συλλήψεων ανά 100.000 κατοίκους για βίαιες επιθέσεις, δολοφονίες και βιασμούς για κάθε πολιτεία των ΗΠΑ το 1973.
+
+Πρέπει να αφαιρεθούν κενά δεδομένα.
+Επίσης τα δεδομένα πρέπει να κανονικοποιηθούν για να είναι συγκρίσιμα.
+```{r}
+df <- USArrests
+df <- na.omit(df) # αφαίρεση κενών
+df <- scale(df) # scaling
+```
+
+Υπολογισμός του πίνακα αποστάσεων μεταξύ ζεύγη παρατηρήσεων. Χρησιμοποιούμε σαν απόσταση την Ευκλίδεια απόσταση.
+Προκύπτει ο πίνακας Ομοιότητας ή Αποστάσεων.
+Ο πίνακας αυτός χρησιμοποιείται στην συνέχεια ως δεδομένα εισόδου στην συνάρτηση hclust που διεξάγει την μέθοδο ιεραρχικής συσταδοποίησης. Επιπλέον σε αυτήν την συνάρτηση ορίζεται και ο τρόπος μέτρησης των αποστάσεων ανάμεσα στις ομάδες, στην περίπτωσή μας ορίστηκε σε Complete Linkage.
+Ακολουθεί η οπτικοποίηση της συσταδοποίησης σε δενδρόγραμμα.
+
+```{r}
+# Dissimilarity matrix
+d <- dist(df, method = "euclidean")
+
+# Hierarchical clustering using Complete Linkage
+hc1 <- hclust(d, method = "complete" )
+
+# Plot the obtained dendrogram
+plot(hc1, cex = 0.6, hang = -1)
+```
+Εναλλακτικά μπορούμε να ορίσουμε διαφορετική μέθοδο υπολογισμού των αποστάσεων όπως η μέθοδος Ward’s.
+Μπορούμε να κατατμήσουμε το δενδρόγραμμα σε 4 συστάδες, να δείξουμε το αντίστοιχο δενδρόγραμμα και να πάρουμε το πλήθος των παρατηρήσεων ανά συστάδα.
+
+```{r}
+# Ward's method
+hc2 <- hclust(d, method = "ward.D" )
+
+# Cut tree into 4 groups
+sub_grp <- cutree(hc2, k = 4)
+
+# Plot the obtained dendrogram
+plot(hc2, cex = 0.6, hang = -1)
+
+# Number of members in each cluster
+table(sub_grp)
+
+
+```
+Επιπλέον μπορούμε να οριοθετήσουμε στο δενδρόγραμμα με περίγραμμα τις συστάδες.
+```{r}
+plot(hc2, cex = 0.6)
+rect.hclust(hc2, k = 4, border = 2:5)
+```
+
+
+Μπορούμε να ορίσουμε στον αρχικό πίνακα την συστάδα στην οποία ανήκει η κάθε πολιτεία.
+```{r}
+USArrests %>%
+  mutate(cluster = sub_grp) %>%
+  head
+```
+Τέλος έχουμε την δυνατότητα να οπτικοποιήσουμε την ιεράρχηση σε διάγραμμα διασποράς. 
+```{r}
+fviz_cluster(list(data = df, cluster = sub_grp))
+```
+

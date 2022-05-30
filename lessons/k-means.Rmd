@@ -23,11 +23,17 @@ library(tidyverse)  # data manipulation
 library(cluster)    # clustering algorithms
 library(factoextra) # clustering algorithms & visualization
 ```
+
+
+Χρησιμοποιούμε τα δεδομένα συλλήψεων ανά 100.000 κατοίκους για βίαιες επιθέσεις, δολοφονίες και βιασμούς για κάθε πολιτεία των ΗΠΑ το 1973.
+
 ```{r}
-# data <- read_csv("data/Country-data.csv") %>% remove_rownames %>% column_to_rownames(var="country") 
+
 data <- USArrests
 
 ```
+
+Κατά την έρευνα πρέπει να αφαιρεθούν κενά δεδομένα και να κανονικοποιηθούν.
 
 ```{r}
 data <- na.omit(data)
