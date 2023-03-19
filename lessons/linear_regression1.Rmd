@@ -78,6 +78,7 @@ plot(df$x,df$y,  col='black', pch=21, bg="blue", xlab="Αριθμός παιδι
 
 abline(model)
 points(df_means$x, df_means$meanY, col='red', pch=13, bg="red")
+points(mean(df$x), mean(df$y), pch=8, col='black')
 ```
 Ερμηνεία της ευθείας γραμμικής παλινδρόμησης y=a+bx.
 
