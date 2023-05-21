@@ -1,6 +1,8 @@
 ---
 title: "Έλεγχοι υποθέσεων"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 Στόχος του τρέχοντος script είναι να επιδείξει πως εκτελείται ένας έλεγχος υπόθεσεων µε την κατανοµή t μέσω της R.
